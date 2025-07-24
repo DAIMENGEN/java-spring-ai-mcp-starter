@@ -1,0 +1,23 @@
+server:
+  port: 9090
+spring:
+  application:
+    name: client
+  ai:
+    mcp:
+      client:
+        enabled: true
+        name: webflux-mcp-client
+        version: 1.0.0
+        request-timeout: 1000s
+        type: ASYNC
+        sse:
+          connections:
+            server:
+              url: http://localhost:8080/
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        options:
+          model: qwen3:8b
+
