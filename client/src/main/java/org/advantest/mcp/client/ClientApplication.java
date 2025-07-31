@@ -60,15 +60,20 @@ public class ClientApplication implements CommandLineRunner {
             chatClient.prompt(query)
                     .toolCallbacks(toolCallbacks)
                     .stream()
-                    .chatResponse()
-                    .subscribe(response -> {
+                    .chatResponse() // 返回 Flux<...>
+                    .doOnNext(response -> {
                         String text = response.getResult().getOutput().getText();
                         if ("\n".equals(text)) {
                             System.out.println();
                         } else {
                             System.out.print(text);
                         }
-                    });
+                    }).doOnComplete(System.out::println)
+                    .doOnError(err -> {
+                        System.err.println("\n❌ Error during chat response: " + err.getMessage());
+                    })
+                    .then()
+                    .block();
         }
     }
 }
